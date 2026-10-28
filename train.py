@@ -39,7 +39,10 @@ def log(out_dir, record):
 
 
 def save(path, state, args):
-    torch.save({"model": state, "config": vars(args)}, path)
+    """Weights + training options; paths and device are left out so that the file, not only
+    the weights, is identical wherever it is trained."""
+    config = {k: v for k, v in vars(args).items() if k not in ("data_root", "out_dir", "device")}
+    torch.save({"model": state, "config": config}, path)
 
 
 def datasets(args):
