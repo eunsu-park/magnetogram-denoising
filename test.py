@@ -91,7 +91,8 @@ def main(default_split="test"):
                     d = Path(args.save_dir, name, split)
                     d.mkdir(parents=True, exist_ok=True)
                     np.savez_compressed(d / Path(f).name, output=out.astype(np.float32))
-        print(f"\n{split}: mean over {len(rows) // len(methods) if rows else 0} groups")
+        n = sum(q["split"] == split for q in rows) // len(methods)
+        print(f"\n{split}: mean over {n} groups")
         print(f"{'method':24}{'PSNR':>8}{'SSIM':>8}{'resid G':>9}{'bias G':>9}{'|flux|':>8}")
         for name in methods:
             r = [q for q in rows if q["split"] == split and q["method"] == name]
