@@ -1,0 +1,7 @@
+# The versions the published checkpoints were reproduced with (Python 3.12, CUDA 13.0).
+# Other versions run the same code; bitwise-identical checkpoints need these versions and the
+# same GPU type (see README).
+torch==2.13.0
+numpy==2.5.2
+scipy==1.18.1
+scikit-image==0.26.0
