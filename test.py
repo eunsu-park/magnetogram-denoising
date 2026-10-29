@@ -99,13 +99,18 @@ def flux_ratio(after, before, sel, min_px=0):
 
 # --- Tables ------------------------------------------------------------------------------------
 
-def table_1a(methods, root, splits, crop=256):
+def table_1a(methods, root, splits, crop=256, save_dir=None):
+    """`save_dir`: also save every output as <save_dir>/<method>/<split>/<stack file> (key `output`)."""
     rows = []
     for split in splits:
         for f in pipeline.stack_files(root, split):
             x, y = (center(a, crop) for a in pipeline.load_stack(f))
             for name, fn in methods.items():
                 out = fn(x)
+                if save_dir:
+                    d = Path(save_dir, name, split)
+                    d.mkdir(parents=True, exist_ok=True)
+                    np.savez_compressed(d / Path(f).name, output=np.asarray(out, np.float32))
                 rows.append({"split": split, "file": Path(f).name, "method": name, **quality(out, y),
                              "flux_bias": float(np.mean(out - y)),
                              "unsigned_flux_ratio": float(np.abs(out).sum()) / (float(np.abs(y).sum()) or 1.0)})
@@ -134,7 +139,9 @@ def k_stack(frames, c, k):
     return pipeline.align_and_stack(frames[lo:lo + k], c - lo)
 
 
-def table_1bc(methods, root, kind, crop=256, stacks=(3, 5, 7)):
+def table_1bc(methods, root, kind, crop=256, stacks=(3, 5, 7), ref_methods=None):
+    """`ref_methods`: {name: fn(input, reference)} for methods whose setting depends on the
+    reference (adaptive TV and BM3D get the noise level of input - reference here)."""
     rows = []
     for group in pipeline.frame_groups(root, "test"):
         frames = list(center(np.stack([np.asarray(pipeline.load_frame(p), np.float32) for p in group]), crop))
@@ -143,6 +150,7 @@ def table_1bc(methods, root, kind, crop=256, stacks=(3, 5, 7)):
             continue
         x, ref, base, c = r
         outs = {name: fn(x) for name, fn in methods.items()}
+        outs.update({name: fn(x, ref) for name, fn in (ref_methods or {}).items()})
         outs.update({f"stack-{k}": k_stack(base, c, k) for k in stacks})
         for name, out in outs.items():
             rows.append({"group": Path(group[0]).name, "method": name, **quality(out, ref)})
