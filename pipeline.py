@@ -66,6 +66,16 @@ def band_limited_shift(a, offset):
     return np.fft.ifft2(fourier_shift(np.fft.fft2(a), offset)).real
 
 
+def bilinear(image, coords):
+    """Bilinear interpolation of `image` at `coords` (2, ny, nx), NaN outside: the interpolation
+    step of the reprojection that the HMI-PHI files store the coordinates of."""
+    from scipy.ndimage import map_coordinates
+    out = np.empty(coords.shape[1:], dtype=np.float64)
+    map_coordinates(np.asarray(image, np.float32), coords.reshape(2, -1), order=1, mode="constant",
+                    cval=np.nan, output=out.reshape(-1))
+    return out.astype(np.float32)
+
+
 def align_and_stack(frames, ref_idx):
     """Shift every frame as a whole onto frames[ref_idx] (phase correlation, 1/10 px; Fourier
     shift) and average: the stacked reference. No scaling or distortion is applied."""
