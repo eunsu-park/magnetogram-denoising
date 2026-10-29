@@ -66,6 +66,18 @@ def band_limited_shift(a, offset):
     return np.fft.ifft2(fourier_shift(np.fft.fft2(a), offset)).real
 
 
+def align_and_stack(frames, ref_idx):
+    """Shift every frame as a whole onto frames[ref_idx] (phase correlation, 1/10 px; Fourier
+    shift) and average: the stacked reference. No scaling or distortion is applied."""
+    from skimage.registration import phase_cross_correlation
+    ref = frames[ref_idx]
+    acc = np.zeros_like(ref, dtype=np.float64)
+    for f in frames:
+        offset, _, _ = phase_cross_correlation(ref, f, upsample_factor=10)
+        acc += band_limited_shift(f, offset)
+    return (acc / len(frames)).astype(np.float32)
+
+
 # --- Training datasets -------------------------------------------------------------------------
 
 class FramePairs(Dataset):
