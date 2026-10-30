@@ -11,8 +11,8 @@ Each part prints its numbers and writes, under --out-dir:
 
 --ckpt-dir holds one folder per checkpoint (CKPTS below), each with model.pt. Methods that are not
 trained: adaptive TV (scikit-image), BM3D (the `bm3d` package, licensed for non-commercial use only
-and therefore optional: without it the BM3D rows are read from <data-root>/outputs/bm3d when
-present, else left out), spatiotemporal noise gating (DeForest 2017), Gaussian blur.
+and therefore optional: without it the BM3D rows are left out; the released results/ and
+outputs/bm3d hold them), spatiotemporal noise gating (DeForest 2017), Gaussian blur.
 """
 import argparse
 import csv

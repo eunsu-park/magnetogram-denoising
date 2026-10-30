@@ -1,3 +1,7 @@
 __pycache__/
 runs/
 *.pt
+notebooks/runs/
+notebooks/results_test/
+notebooks/my_results/
+notebooks/results_recomputed/

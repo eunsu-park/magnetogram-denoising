@@ -1,0 +1,4 @@
+# Optional: the BM3D baseline (Tables 1 and 2, the injection test). The bm3d package of Tampere
+# University is licensed for non-commercial use only; install it only if you accept that license.
+# Without it, analysis.py leaves the BM3D rows out (the released results/ and outputs/bm3d hold them).
+bm3d==4.0.3

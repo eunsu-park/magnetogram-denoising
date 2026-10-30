@@ -8,7 +8,7 @@ Each function reads the figure data in `data_dir`, draws the figure, saves <name
 `out_dir` when it is given, shows it when `show` is true, and returns the matplotlib figure. The
 keyword arguments in capitals are the plot settings (sizes, colours, fonts, limits); their
 defaults reproduce the figures of the paper. The plotting code is the co-author's, as used for
-the paper. Fig. 1 (the pipeline schematic) is an image, figures/fig1-pipeline.png.
+the paper. Fig. 1 (the pipeline schematic) is an image, assets/fig1-pipeline.png.
 """
 import csv
 from pathlib import Path
