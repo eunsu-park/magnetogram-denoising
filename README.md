@@ -80,7 +80,13 @@ inside the file). On other GPUs or package versions the trained weights can diff
 bits; we have not measured how far the numbers move then. Evaluation is less sensitive: scoring
 the released checkpoints on another platform (an Apple GPU) gave the paper's numbers at their
 printed precision. `test.py` and `analysis.py` reproduce the paper's numbers from the released
-checkpoints.
+checkpoints. One exception to bitwise reproduction: the `bm3d` package gives slightly different
+outputs from run to run on the same machine (relative differences of about 1e-7), so the BM3D rows
+are reproduced at their printed precision only.
+
+Checked on our machine: retraining all 19 models with `reproduce.sh` from the released data gave
+checkpoints whose weights are bitwise equal to the released ones, and `analysis.py` then
+reproduced every table, number and figure-data file (the BM3D values to about 1e-7).
 
 ## Files
 
