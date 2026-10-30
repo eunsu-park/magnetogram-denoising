@@ -488,7 +488,7 @@ def part_table2(args, dev):
     if gap:
         num(f"270 s pairing ({len(gap)} runs): MDI {np.mean([mdi_red[n] for n in gap]):.1f} +/- {np.std([mdi_red[n] for n in gap], ddof=1):.1f}%, "
             f"PHI {np.mean([phi_red[n][0] for n in gap]):.1f} +/- {np.std([phi_red[n][0] for n in gap], ddof=1):.1f}% (sample s.d.)")
-    ratios = [v[1] for v in phi_red.values()]
+    ratios = [v[1] for n, v in phi_red.items() if n != "n2n"]   # the trained models of the paper's panel
     num(f"ratio to the own 270 s reference over the {len(ratios)} models: {min(ratios):.2f}-{max(ratios):.2f}")
     num("training target x augmentation (MDI / PHI reduction): " + ", ".join(
         f"{n} {mdi_red[n]:.0f}/{phi_red[n][0]:.0f}%" for n in ("n2n", "n2n_mixsigma", "supervised", "supervised_mixsigma") if n in models))
