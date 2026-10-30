@@ -7,7 +7,8 @@
     python train.py --model n2v | supervised | park2020 ...
 
 With the same software, GPU type and seed, the checkpoint is bitwise identical to the published
-one (see README). Writes `model.pt` (+ `model_best.pt` for Park 2020) and `metrics.jsonl`.
+one (see README). Writes `model.pt`, the checkpoint the paper reports (for Park 2020 the one with
+the lowest validation L1; its last step is `model_last.pt`), and `metrics.jsonl`.
 """
 import json
 import os
@@ -100,7 +101,8 @@ def train_unet(args, dev):
 
 def train_park2020(args, dev):
     """Park et al. (2020): cGAN (BCE) + lambda * L1; the discriminator steps first.
-    `model_best.pt` keeps the generator with the lowest validation L1."""
+    `model.pt` keeps the generator with the lowest validation L1 (the reported checkpoint),
+    `model_last.pt` the last step."""
     train_ds, val_ds = datasets(args)
     train_dl = DataLoader(train_ds, batch_size=args.batch_size, num_workers=args.num_workers,
                           drop_last=True, pin_memory=dev.type == "cuda",
@@ -132,10 +134,10 @@ def train_park2020(args, dev):
             log(args.out_dir, {"step": step, "val": v})
             if v < best:
                 best = v
-                save(Path(args.out_dir, "model_best.pt"), g.state_dict(), args)
+                save(Path(args.out_dir, "model.pt"), g.state_dict(), args)
         if step >= args.steps:
             break
-    save(Path(args.out_dir, "model.pt"), g.state_dict(), args)
+    save(Path(args.out_dir, "model_last.pt"), g.state_dict(), args)
 
 
 def main():
