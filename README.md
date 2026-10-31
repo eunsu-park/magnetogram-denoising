@@ -47,7 +47,8 @@ MDI and PHI file names) and how it was made. File names give the UTC time of the
 | `outputs`, `results` | the model outputs and the paper's tables, numbers and figure data, made by `analysis.py` |
 
 The preprocessing (reprojection, co-alignment, stacking of the frames) was done once with the
-authors' research code; its products are what is released.
+authors' research code; its products are what is released. The data are released under
+CC BY 4.0.
 
 ## Quick start
 
