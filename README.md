@@ -8,7 +8,7 @@ applied without retraining to SOHO/MDI and Solar Orbiter/PHI-HRT magnetograms.
 
 This repository holds everything needed to retrain the models of the paper and to recompute every
 number, table and figure of it from the released data. The data, the model outputs and the trained
-checkpoints are in a separate data repository (URL to be added).
+checkpoints are on Zenodo, https://doi.org/10.5281/zenodo.23838022 (public with the paper).
 
 ## Results of the paper
 
@@ -31,7 +31,9 @@ pip install -r requirements-baselines.txt     # optional: BM3D (non-commercial l
 
 ## Data
 
-Download the data repository and pass its folder as `--data-root` (notebooks: `DATA_ROOT`).
+Download the Zenodo record (https://doi.org/10.5281/zenodo.23838022) into one folder, extract it
+(`sha256sum -c BUNDLES.sha256; for f in *.tar; do tar -xf "$f"; done; sha256sum -c SHA256SUMS`,
+about 95 GB), and pass that folder as `--data-root` (notebooks: `DATA_ROOT`).
 Every sample is one `npz` file with a `meta` entry (JSON) naming its source record (JSOC `T_REC`,
 MDI and PHI file names) and how it was made. File names give the UTC time of the observation.
 
